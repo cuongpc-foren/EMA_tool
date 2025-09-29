@@ -67,6 +67,7 @@ class Program
             _ => KlineInterval.OneDay
         };
         int maxConcurrency = int.TryParse(config["App:MaxConcurrency"], out var mc) ? mc : 10;
+        int batchSize = int.TryParse(config["App:BatchSize"], out var bs) ? bs : 25;
 
         var client = new BinanceRestClient(o =>
         {
@@ -115,7 +116,6 @@ class Program
             {
                 Info($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} | scan start");
 
-                const int batchSize = 25;
                 for (int i = 0; i < allSymbols.Count; i += batchSize)
                 {
                     var batch = allSymbols.Skip(i).Take(batchSize).ToList();
